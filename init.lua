@@ -119,12 +119,12 @@ require('lazy').setup({
     },
   },
 
-  {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+  { -- Theme inspired by Atom
+    "RRethy/nvim-base16",
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      --vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'base16-ayu-dark'
     end,
   },
 
@@ -135,7 +135,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'auto',
         component_separators = '|',
         section_separators = '',
       },
@@ -195,17 +195,71 @@ require('lazy').setup({
   --
   --    An additional note is that if you only copied in the `init.lua`, you can just comment this line
   --    to get rid of the warning telling you that there are not plugins in `lua/custom/plugins/`.
+  --
+
+  -- Copilot
+  { 'github/copilot.vim' },
+
+  -- Toggleterm
+  { "akinsho/toggleterm.nvim"
+  },
+  -- harpoon
+  { 'theprimeagen/harpoon' },
+  -- clangd-exstension
+
+  { 'p00f/clangd_extensions.nvim' },
+  { import = 'custom.plugins' },
+
+  -- Fsharp
+  { 'ionide/Ionide-vim' },
+
+  -- Zen mode
+  { 'folke/zen-mode.nvim' },
+
   { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
+-- netrw keymap
+vim.keymap.set("n", "<leader>pv", ":Explore<cr>", { noremap = true, silent = true })
 -- See `:help vim.o`
 
 -- Set highlight on search
 vim.o.hlsearch = false
+vim.o.incsearch = true
+
+-- Smart indent
+vim.o.smartindent = true
+
+-- No wrap by default
+vim.o.wrap = false
+-- hidden
+vim.o.hidden = true
+
+vim.o.scrolloff = 10
+
+vim.o.cursorline = true
+
+vim.o.splitbelow = true
+vim.o.splitright = true
+vim.o.swapfile = false
+vim.o.syntax = "on"
+vim.o.synmaxcol = 500
+vim.o.signcolumn = "yes"
+
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
+vim.opt.syntax = "on"
+vim.o.listchars = "nbsp:¬,extends:»,precedes:«,trail:•,tab:»·,eol:¬"
+vim.opt.list = true
 
 -- Make line numbers default
 vim.wo.number = true
+-- Also add relative line numbering
+vim.wo.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -233,6 +287,8 @@ vim.o.updatetime = 250
 vim.o.timeout = true
 vim.o.timeoutlen = 300
 
+-- collunm
+vim.o.cc = "80"
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
@@ -249,6 +305,28 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+-- Move selected line / block of text in visual mode
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+
+-- apppend to end of lines
+vim.keymap.set('n', 'J', "mzJ`z", { noremap = true, silent = true })
+
+-- Better indenting
+vim.keymap.set('v', '<', '<gv', { noremap = true, silent = true })
+vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
+
+-- seach stay in the middle of the window
+vim.keymap.set('n', 'n', 'nzzzv', { noremap = true, silent = true })
+vim.keymap.set('n', 'N', 'Nzzzv', { noremap = true, silent = true })
+
+-- Delete into void buffer
+vim.keymap.set('n', 'Q', '<Nop>', { noremap = true, silent = true })
+vim.keymap.set('x', '<leader>p', '"_dP', { noremap = true, silent = true })
+-- Escape to normal mode from insert mode
+vim.keymap.set('i', '<C-c>', '<Esc>', { noremap = true, silent = true })
+-- Format code
+vim.keymap.set('n', '<leader>f', ':Format<CR>', { noremap = true, silent = true })
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -360,6 +438,17 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
+-- disable ghost text
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  virtual_text = false,
+  underline = true,
+  signs = true,
+  float = {
+    focusable = false,
+    style = "minimal",
+    border = "rounded",
+  },
+})
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
@@ -418,9 +507,9 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
+   gopls = {},
+   pyright = {},
+   rust_analyzer = {},
   -- tsserver = {},
 
   lua_ls = {
@@ -454,6 +543,24 @@ mason_lspconfig.setup_handlers {
     }
   end,
 }
+-- Setup clangd extensions
+require('clangd_extensions').setup({
+  server = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    -- flags = lsp_flags,
+  }
+})
+
+
+-- ionide setup
+
+-- -- Copilot-cmp
+-- local copilot_cmp = require 'copilot'
+-- copilot_cmp.setup({
+--   suggestion = { enable = true },
+--   panel = { enable = false },
+-- })
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -477,30 +584,62 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+    -- ['<Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --   elseif luasnip.expand_or_locally_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
+    -- ['<S-Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_prev_item()
+    --   elseif luasnip.locally_jumpable(-1) then
+    --     luasnip.jump(-1)
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
   },
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'copilot' },
   },
 }
+--Toggleterm
+require('toggleterm').setup {
+  size = 20,
+  open_mapping = [[<c-t>]],
+  hide_numbers = false,
+  shade_filetypes = {},
+  start_in_insert = true,
+  persist_size = true,
+  direction = 'float',
+  close_on_exit = true,
+  shell = vim.o.shell,
+  -- float_opts = {
+  --   width = 160,
+  --   height = 35,
+  --   winblend = 3,
+  --   highlights = {
+  --     border = "Normal",
+  --     background = "Normal",
+  --   }
+  -- }
+}
 
+-- harpoon
+local mark = require('harpoon.mark')
+local ui = require('harpoon.ui')
+-- Setup harpoon
+vim.keymap.set('n', "<C-a>", mark.add_file)
+vim.keymap.set('n', "<C-e>", ui.toggle_quick_menu)
+vim.keymap.set('n', "<leader>1", function() ui.nav_file(1) end)
+vim.keymap.set('n', "<leader>2", function() ui.nav_file(2) end)
+vim.keymap.set('n', "<leader>3", function() ui.nav_file(3) end)
+vim.keymap.set('n', "<leader>4", function() ui.nav_file(4) end)
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
