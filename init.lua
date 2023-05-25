@@ -94,7 +94,8 @@ require('lazy').setup({
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' },
+    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip',
+      'rafamadriz/friendly-snippets' },
   },
 
   -- Useful plugin to show you pending keybinds.
@@ -216,7 +217,15 @@ require('lazy').setup({
   -- Zen mode
   { 'folke/zen-mode.nvim' },
 
+  -- Undotree
+  { 'mbbill/undotree' },
+
   { import = 'custom.plugins' },
+
+
+  -- Treesitter context
+  { 'nvim-treesitter/playground' },
+  { 'nvim-treesitter/nvim-treesitter-context' },
 }, {})
 
 -- [[ Setting options ]]
@@ -258,8 +267,8 @@ vim.opt.list = true
 
 -- Make line numbers default
 vim.wo.number = true
--- Also add relative line numbering
-vim.wo.relativenumber = true
+-- Also add relative line numbering (fine motor skills not good enough for this)
+vim.wo.relativenumber = false
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -507,9 +516,9 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-   gopls = {},
-   pyright = {},
-   rust_analyzer = {},
+  gopls = {},
+  pyright = {},
+  rust_analyzer = {},
   -- tsserver = {},
 
   lua_ls = {
