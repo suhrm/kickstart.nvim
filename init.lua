@@ -7,8 +7,8 @@
 Kickstart.nvim is *not* a distribution.
 
 Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, and understand
-  what your configuration is doing.
+  The goal is that you can read every line of code, top-to-bottom, understand
+  what your configuration is doing, and modify it to suit your needs.
 
   Once you've done that, you should start exploring, configuring and tinkering to
   explore Neovim!
@@ -94,8 +94,17 @@ require('lazy').setup({
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip',
-      'rafamadriz/friendly-snippets' },
+    dependencies = {
+      -- Snippet Engine & its associated nvim-cmp source
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+
+      -- Adds LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
+
+      -- Adds a number of user-friendly snippets
+      'rafamadriz/friendly-snippets',
+    },
   },
 
   -- Useful plugin to show you pending keybinds.
@@ -120,28 +129,11 @@ require('lazy').setup({
     },
   },
 
-  { -- Theme inspired by Atom
-    "RRethy/nvim-base16",
-    priority = 1000,
-    config = function()
-      --vim.cmd.colorscheme 'onedark'
-      vim.cmd.colorscheme 'base16-ayu-dark'
-    end,
-  },
+  -- Theme related configs go here
+  require 'kickstart.plugins.theme',
 
-  {
-    -- Set lualine as statusline
-    'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = 'auto',
-        component_separators = '|',
-        section_separators = '',
-      },
-    },
-  },
+  -- Status line related configs go here
+  require 'kickstart.plugins.statusline',
 
   {
     -- Add indentation guides even on blank lines
@@ -197,41 +189,15 @@ require('lazy').setup({
   --    An additional note is that if you only copied in the `init.lua`, you can just comment this line
   --    to get rid of the warning telling you that there are not plugins in `lua/custom/plugins/`.
   --
-
-  -- Copilot
-  { 'github/copilot.vim' },
-
-  -- Toggleterm
-  { "akinsho/toggleterm.nvim"
-  },
-  -- harpoon
-  { 'theprimeagen/harpoon' },
-  -- clangd-exstension
-
-  { 'p00f/clangd_extensions.nvim' },
   { import = 'custom.plugins' },
 
-  -- Fsharp
-  { 'ionide/Ionide-vim' },
-
-  -- Zen mode
-  { 'folke/zen-mode.nvim' },
-
-  -- Undotree
-  { 'mbbill/undotree' },
-
-  { import = 'custom.plugins' },
-
-
-  -- Treesitter context
-  { 'nvim-treesitter/playground' },
-  { 'nvim-treesitter/nvim-treesitter-context' },
 }, {})
 
 -- [[ Setting options ]]
 -- netrw keymap
 vim.keymap.set("n", "<leader>pv", ":Explore<cr>", { noremap = true, silent = true })
 -- See `:help vim.o`
+-- NOTE: You can change these options as you wish!
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -464,7 +430,7 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
--- LSP settings.
+-- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -571,7 +537,8 @@ require('clangd_extensions').setup({
 --   panel = { enable = false },
 -- })
 
--- nvim-cmp setup
+-- [[ Configure nvim-cmp ]]
+-- See `:help cmp`
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
