@@ -20,7 +20,25 @@ return {
   { 'ionide/Ionide-vim' },
 
   -- Zen mode
-  { 'folke/zen-mode.nvim' },
+  { 'folke/zen-mode.nvim', opts = {
+    window = {
+      backdrop = 1,
+      width = 90,
+      options = {
+        signcolumn = 'yes',
+        number = true,
+        cursorline = true,
+        cursorcolumn = true,
+      },
+    }
+
+  } },
+
+  -- True Zen Mode
+  { 'Pocco81/TrueZen.nvim' },
+
+  -- Centerpad
+  { 'smithbm2316/centerpad.nvim' },
 
   -- Undotree
   { 'mbbill/undotree' },
@@ -31,5 +49,8 @@ return {
   -- Treesitter context
   { 'nvim-treesitter/playground' },
   { 'nvim-treesitter/nvim-treesitter-context' },
+
+  -- protobuf
+  { 'uarun/vim-protobuf' },
 
 }

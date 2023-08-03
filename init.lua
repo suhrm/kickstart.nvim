@@ -84,7 +84,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -108,7 +108,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',          opts = {} },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -122,7 +122,8 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
+          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
       end,
@@ -135,6 +136,15 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'onedark'
+    end,
+  },
+  { -- Theme inspired by Atom
+    "RRethy/nvim-base16",
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'onedark'
+      --vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'base16-ayu-dark'
     end,
   },
 
@@ -164,7 +174,7 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',         opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -231,6 +241,7 @@ vim.o.hidden = true
 vim.o.scrolloff = 10
 
 vim.o.cursorline = true
+vim.o.cursorcolumn = true
 
 vim.o.splitbelow = true
 vim.o.splitright = true
@@ -280,12 +291,19 @@ vim.o.timeout = true
 vim.o.timeoutlen = 300
 
 -- collunm
-vim.o.cc = "80"
+vim.o.colorcolumn = "80"
+-- vim.o.highlight = "ColorColumn ctermbg=16"
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
+vim.o.exrc = true
+
+
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+
+
 
 -- [[ Basic Keymaps ]]
 
@@ -498,11 +516,13 @@ end
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
-  -- clangd = {},
   gopls = {},
   pyright = {},
-  rust_analyzer = {},
-  -- tsserver = {},
+  rust_analyzer = {
+
+
+
+  },
 
   lua_ls = {
     Lua = {
@@ -540,7 +560,9 @@ require('clangd_extensions').setup({
   server = {
     on_attach = on_attach,
     capabilities = capabilities,
-    -- flags = lsp_flags,
+    flags = {
+      offsetEncoding = { 'utf-16' },
+    },
   }
 })
 
@@ -570,7 +592,7 @@ cmp.setup {
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs( -4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
@@ -634,5 +656,12 @@ vim.keymap.set('n', "<leader>1", function() ui.nav_file(1) end)
 vim.keymap.set('n', "<leader>2", function() ui.nav_file(2) end)
 vim.keymap.set('n', "<leader>3", function() ui.nav_file(3) end)
 vim.keymap.set('n', "<leader>4", function() ui.nav_file(4) end)
+
+-- Setup compile keymaps
+vim.keymap.set('n', "<leader>cc", ":make<CR>")
+-- vim.keymap.set('n', "<leader>cc", function() require('harpoon.term').sendCommand(1, "make") end)
+
+
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
