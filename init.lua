@@ -522,9 +522,9 @@ local servers = {
   gopls = {},
   pyright = {},
   rust_analyzer = {
-
-
-
+    checkOnSave = {
+      command = 'cargo lcheck',
+    },
   },
 
   lua_ls = {
@@ -650,22 +650,22 @@ require('toggleterm').setup {
   -- }
 }
 
+
+
 -- harpoon
 local mark = require('harpoon.mark')
 local ui = require('harpoon.ui')
 -- Setup harpoon
-vim.keymap.set('n', "<C-a>", mark.add_file)
-vim.keymap.set('n', "<C-e>", ui.toggle_quick_menu)
+vim.keymap.set('n', "<C-e>",mark.add_file)
+vim.keymap.set('n', "<leader>e", ui.toggle_quick_menu)
 vim.keymap.set('n', "<leader>1", function() ui.nav_file(1) end)
 vim.keymap.set('n', "<leader>2", function() ui.nav_file(2) end)
 vim.keymap.set('n', "<leader>3", function() ui.nav_file(3) end)
 vim.keymap.set('n', "<leader>4", function() ui.nav_file(4) end)
 
--- Setup compile keymaps
-vim.keymap.set('n', "<leader>cc", ":make<CR>")
 -- vim.keymap.set('n', "<leader>cc", function() require('harpoon.term').sendCommand(1, "make") end)
 
 
 
 -- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- vim: ts=3 sts=2 sw=2 et

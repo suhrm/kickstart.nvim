@@ -20,19 +20,22 @@ return {
   { 'ionide/Ionide-vim' },
 
   -- Zen mode
-  { 'folke/zen-mode.nvim', opts = {
-    window = {
-      backdrop = 1,
-      width = 90,
-      options = {
-        signcolumn = 'yes',
-        number = true,
-        cursorline = true,
-        cursorcolumn = true,
-      },
-    }
+  {
+    'folke/zen-mode.nvim',
+    opts = {
+      window = {
+        backdrop = 1,
+        width = 90,
+        options = {
+          signcolumn = 'yes',
+          number = true,
+          cursorline = true,
+          cursorcolumn = true,
+        },
+      }
 
-  } },
+    }
+  },
 
   -- True Zen Mode
   { 'Pocco81/TrueZen.nvim' },
@@ -52,5 +55,27 @@ return {
 
   -- protobuf
   { 'uarun/vim-protobuf' },
+
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  },
+
+
+  -- Folke trouble
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+  },
 
 }
