@@ -12,7 +12,7 @@ return {
   },
   -- harpoon
   { 'theprimeagen/harpoon' },
-  -- clangd-exstension
+  -- clangd-extension
 
   { 'p00f/clangd_extensions.nvim' },
 

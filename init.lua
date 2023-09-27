@@ -565,7 +565,7 @@ require('clangd_extensions').setup({
     on_attach = on_attach,
     capabilities = capabilities,
     flags = {
-      offsetEncoding = { 'utf-16' },
+      offsetEncoding = { 'utf-16', 'utf-8' },
     },
   }
 })
@@ -596,7 +596,7 @@ cmp.setup {
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs( -4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
@@ -656,7 +656,7 @@ require('toggleterm').setup {
 local mark = require('harpoon.mark')
 local ui = require('harpoon.ui')
 -- Setup harpoon
-vim.keymap.set('n', "<C-s>",mark.add_file)
+vim.keymap.set('n', "<C-s>", mark.add_file)
 vim.keymap.set('n', "<C-e>", ui.toggle_quick_menu)
 vim.keymap.set('n', "<leader>1", function() ui.nav_file(1) end)
 vim.keymap.set('n', "<leader>2", function() ui.nav_file(2) end)
