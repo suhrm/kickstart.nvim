@@ -521,11 +521,6 @@ end
 local servers = {
   gopls = {},
   pyright = {},
-  rust_analyzer = {
-    checkOnSave = {
-      command = 'cargo lcheck',
-    },
-  },
 
   lua_ls = {
     Lua = {
@@ -559,6 +554,22 @@ mason_lspconfig.setup_handlers {
     }
   end
 }
+
+
+-- Setup rust-analyzer for some extra features
+require('lspconfig').rust_analyzer.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    ['rust-analyzer'] = {
+      checkOnSave = {
+        command = 'lcheck',
+      },
+    },
+  },
+})
+
+
 -- Setup clangd extensions
 require('clangd_extensions').setup({
   server = {
