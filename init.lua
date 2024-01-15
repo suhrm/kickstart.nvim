@@ -538,33 +538,35 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
-
+  -- if client.server_capabilities.inlayHintProvider then
+  --   vim.lsp.inlay_hint(bufnr, true)
+  -- end
 
   -- code lens
-  if client.resolved_capabilities.code_lens then
-    local codelens = vim.api.nvim_create_augroup(
-      'LSPCodeLens',
-      { clear = true }
-    )
-    vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'CursorHold' }, {
-      group = codelens,
-      callback = function()
-        vim.lsp.codelens.refresh()
-      end,
-      buffer = bufnr,
-    })
-  end
+  -- if client.resolved_capabilities.code_lens then
+  --   local codelens = vim.api.nvim_create_augroup(
+  --     'LSPCodeLens',
+  --     { clear = true }
+  --   )
+  --   vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'CursorHold' }, {
+  --     group = codelens,
+  --     callback = function()
+  --       vim.lsp.codelens.refresh()
+  --     end,
+  --     buffer = bufnr,
+  --   })
+  -- end
 end
 
 -- document existing key chains
 require('which-key').register {
-  ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-  ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-  ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-  ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
-  ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-  ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-  ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+  ['<leader>c'] = { name = '[c]ode', _ = 'which_key_ignore' },
+  ['<leader>d'] = { name = '[d]ocument', _ = 'which_key_ignore' },
+  ['<leader>g'] = { name = '[g]it', _ = 'which_key_ignore' },
+  ['<leader>h'] = { name = 'more git', _ = 'which_key_ignore' },
+  ['<leader>r'] = { name = '[r]ename', _ = 'which_key_ignore' },
+  ['<leader>s'] = { name = '[s]earch', _ = 'which_key_ignore' },
+  ['<leader>w'] = { name = '[w]orkspace', _ = 'which_key_ignore' },
 }
 
 -- mason-lspconfig requires that these setup functions are called in this order
@@ -643,6 +645,11 @@ require('lspconfig').rust_analyzer.setup({
     ['rust-analyzer'] = {
       checkOnSave = {
         command = 'lcheck',
+      },
+      inlayHints = {
+        chainingHints = true,
+        parameterHints = true,
+        typeHints = true,
       },
     },
   },
